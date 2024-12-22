@@ -40,7 +40,7 @@ function App() {
         setError("");
       }
     } catch (err) {
-      console.error("Error during API call:", err); // Log the error
+      console.error("Error during API call:", err);
       setError("Failed to connect to the server");
       setResult("");
     }
