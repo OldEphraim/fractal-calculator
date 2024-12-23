@@ -20,14 +20,12 @@ function App() {
 
   const calculateResult = async () => {
     try {
-      const [num1, operation, num2] = parseInput(input);
-
       const response = await fetch("http://localhost:5000/api/calculate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ num1, num2, operation }),
+        body: JSON.stringify({ expression: input }),
       });
 
       const data = await response.json();
@@ -36,7 +34,7 @@ function App() {
         setError(data.error || "An error occurred");
         setResult("");
       } else {
-        setResult(data.result);
+        setResult(data.result.toString());
         setError("");
       }
     } catch (err) {
@@ -44,24 +42,6 @@ function App() {
       setError("Failed to connect to the server");
       setResult("");
     }
-  };
-
-  const parseInput = (input: string): [number, string, number] => {
-    const match = input.match(/^(\d+)([+\-*/])(\d+)$/);
-    if (!match) {
-      throw new Error("Invalid input format");
-    }
-
-    const [, num1, operator, num2] = match;
-
-    const operationMap: Record<string, string> = {
-      "+": "add",
-      "-": "subtract",
-      "*": "multiply",
-      "/": "divide",
-    };
-
-    return [parseFloat(num1), operationMap[operator], parseFloat(num2)];
   };
 
   const buttons = [
@@ -79,9 +59,11 @@ function App() {
     "-",
     "0",
     ".",
-    "=",
+    "(",
+    ")",
     "+",
     "C",
+    "=",
   ];
 
   return (
